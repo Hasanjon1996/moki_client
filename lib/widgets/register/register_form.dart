@@ -24,13 +24,13 @@ class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
   Model model = Model();
   bool passwordVisible = false;
+  bool showpassword = false;
+  bool request = false;
 
   @override
   void initState() {
     super.initState();
   }
-  bool _showpassword = false;
-  bool _request = false;
 
 
   TextEditingController emailController = new TextEditingController();

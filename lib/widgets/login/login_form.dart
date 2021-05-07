@@ -46,14 +46,14 @@ class _LoginFormState extends State<LoginForm> {
         key: _formKey,
                 child: Column(
                 children: <Widget>[
-    MyTextFormField(
-    labelText: "Phone",
-    hintText: 'Phone',
-    validator: (String value) {
-    if (!validator.isNumeric(value)) {
-    return 'Please enter a valid phone';
+                     MyTextFormField(
+                     labelText: "Phone",
+                      hintText: 'Phone',
+                      validator: (String value) {
+                      if (!validator.isNumeric(value)) {
+                      return 'Please enter a valid phone';
     }
-    return null;
+                      return null;
               },
               onSaved: (String value) {
                 model.email = value;
@@ -102,15 +102,13 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 color: Colors.red,
                 onPressed: () async {
-                  String phone = emailController.text.toString();
-                  LoginModel loginForm = await LoginForm(phone);
-                  if (loginForm.success) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Confirm(
-                              phone: emailController.text.toString())),
-                    );
+                  if (_formKey.currentState.validate()) {
+                    _formKey.currentState.save();
+                    Nav.routeReplacement(context, Confirm(
+                        phone: emailController.text.toString()));
+//                      Navigator.push(context,
+//                          MaterialPageRoute(builder: (context) => Result()));
+
                   }
                 },
                 child: Text(
@@ -133,7 +131,7 @@ class _LoginFormState extends State<LoginForm> {
       ),
     );
   }
-  Future<LoginModel> LoginForm(String phone) async {
+  Future<LoginModel> Login(String phone) async {
     String url = "http://3.123.153.179/client/login-request";
     final respons =
     await http.post(url, body: {"phone": phone, "user_type": "client"});
@@ -141,10 +139,10 @@ class _LoginFormState extends State<LoginForm> {
       final String responseString = respons.body;
       return loginModelFromJson(responseString);
     } else if (respons.statusCode == 401) {
-     // Navigator.push(
-        //context,
-       // MaterialPageRoute(builder: (context) => RegisterPage(phone: phone)),
-     // );
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => RegisterPage(phone: phone)),
+      );
     } else {
       return null;
     }

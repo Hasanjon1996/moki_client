@@ -24,11 +24,17 @@ class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   Model model = Model();
   bool passwordVisible = false;
+  bool showpassword = false;
+  bool request = false;
 
   @override
   void initState() {
     super.initState();
   }
+
+
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,16 +44,16 @@ class _LoginFormState extends State<LoginForm> {
       padding: EdgeInsets.only(top: 24, right: 42, left: 42),
       child: Form(
         key: _formKey,
-        child: Column(
-          children: <Widget>[
-            MyTextFormField(
-              labelText: "Phone",
-              hintText: 'Phone',
-              validator: (String value) {
-                if (!validator.isNumeric(value)) {
-                  return 'Please enter a valid phone';
-                }
-                return null;
+                child: Column(
+                children: <Widget>[
+    MyTextFormField(
+    labelText: "Phone",
+    hintText: 'Phone',
+    validator: (String value) {
+    if (!validator.isNumeric(value)) {
+    return 'Please enter a valid phone';
+    }
+    return null;
               },
               onSaved: (String value) {
                 model.email = value;
@@ -84,38 +90,42 @@ class _LoginFormState extends State<LoginForm> {
             //   },
             // ),
             Container(
-              height: 42,
+              height: 48,
               width: ScreenUtil.getWidth(context),
-              margin: EdgeInsets.only(top: 32, bottom: 12),
+              margin: EdgeInsets.only(top: 12, bottom: 0),
               child: ShadowButton(
                 borderRadius: 12,
                 height: 40,
-                child: FlatButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(8.0),
-                  ),
-                  color: themeColor.getColor(),
-                  onPressed: () {
-                    if (_formKey.currentState.validate()) {
-                      _formKey.currentState.save();
-
-                      Nav.routeReplacement(context, Confirm());
-
-//                      Navigator.push(
-//                          context,
-//                          MaterialPageRoute(
-//                              builder: (context) => Result(model: this.model)));
-                    }
-                  },
-                  child: Text(
-                    'Sign In',
-                    style: GoogleFonts.poppins(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400,
-                    ),
+              child: FlatButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                color: Colors.red,
+                onPressed: () async {
+                  String phone = emailController.text.toString();
+                  LoginModel loginForm = await LoginForm(phone);
+                  if (loginForm.success) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Confirm(
+                              phone: emailController.text.toString())),
+                    );
+                  }
+                },
+                child: Text(
+                  'Sign In',
+                  style: GoogleFonts.poppins(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
+                // child: new Text(
+                //   getTranslated(context, 'login'),
+                //   style: TextStyle(fontSize: 22.0),
+                // ),
+              ),
               ),
             ),
           ],
@@ -123,7 +133,7 @@ class _LoginFormState extends State<LoginForm> {
       ),
     );
   }
-  Future<LoginModel> Login(String phone) async {
+  Future<LoginModel> LoginForm(String phone) async {
     String url = "http://3.123.153.179/client/login-request";
     final respons =
     await http.post(url, body: {"phone": phone, "user_type": "client"});
@@ -131,10 +141,10 @@ class _LoginFormState extends State<LoginForm> {
       final String responseString = respons.body;
       return loginModelFromJson(responseString);
     } else if (respons.statusCode == 401) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => RegisterPage(phone: phone)),
-      );
+     // Navigator.push(
+        //context,
+       // MaterialPageRoute(builder: (context) => RegisterPage(phone: phone)),
+     // );
     } else {
       return null;
     }

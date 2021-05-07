@@ -1,6 +1,6 @@
 // To parse this JSON data, do
 //
-//     final loginModel = loginModelFromJson(jsonString);
+//     final loginModel = loginmodelFromJson(jsonString);
 
 import 'dart:convert';
 

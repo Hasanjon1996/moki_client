@@ -7,6 +7,7 @@ import 'package:shoppingapp/utils/theme_notifier.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:shoppingapp/C.dart';
+import 'package:shoppingapp/widgets/login/LoginModel.dart';
 import 'package:shoppingapp/widgets/login/Model.dart';
 
 import '../../config.dart';
@@ -14,9 +15,10 @@ import '../../config.dart';
 class Confirm extends StatelessWidget {
   String phone;
   TextEditingController Controller = new TextEditingController();
+ // TextEditingController Controller = new TextEditingController();
   Confirm({Key key, @required this.phone}) : super(key: key);
 
-  Future<Model> Complete(String phone, String sms) async {
+  Future<Model> smsComplete(String phone, String sms) async {
     String url = "http://3.123.153.179/client/login-complete";
     final respons =
     await http.post(url, body: {"phone": phone, "sms_code": sms});
@@ -67,7 +69,7 @@ class Confirm extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  Model sms = await Complete(phone, Controller.text);
+                  Model sms = await smsComplete(phone, Controller.text);
                   if (sms != null) {
                     SharedPreferences prefs = await SharedPreferences.getInstance();
                     prefs.setString(C.ACCESS_TOKEN, sms.authKey);

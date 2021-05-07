@@ -5,8 +5,12 @@ import 'package:shoppingapp/utils/navigator.dart';
 import 'package:shoppingapp/utils/screen.dart';
 import 'package:shoppingapp/utils/theme_notifier.dart';
 import 'package:shoppingapp/widgets/commons/shadow_button.dart';
+import 'package:shoppingapp/widgets/login/Confirm.dart';
 import 'package:shoppingapp/widgets/register/register_form_model.dart';
+import 'package:shoppingapp/widgets/login/LoginModel.dart';
+import 'package:shoppingapp/pages/register_page.dart';
 import 'package:validators/validators.dart' as validator;
+import 'package:http/http.dart' as http;
 
 import '../../main.dart';
 import '../commons/custom_textfield.dart';
@@ -25,6 +29,12 @@ class _RegisterFormState extends State<RegisterForm> {
   void initState() {
     super.initState();
   }
+  bool _showpassword = false;
+  bool _request = false;
+
+
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +136,8 @@ class _RegisterFormState extends State<RegisterForm> {
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
-                      Nav.routeReplacement(context, InitPage());
+                      Nav.routeReplacement(context, Confirm(
+                          phone: emailController.text.toString()));
 //                      Navigator.push(context,
 //                          MaterialPageRoute(builder: (context) => Result()));
 
@@ -147,5 +158,21 @@ class _RegisterFormState extends State<RegisterForm> {
         ),
       ),
     );
+  }
+  Future<LoginModel> Login(String phone) async {
+    String url = "http://3.123.153.179/client/login-request";
+    final respons =
+    await http.post(url, body: {"phone": phone, "user_type": "client"});
+    if (respons.statusCode == 200 || respons.statusCode == 201) {
+      final String responseString = respons.body;
+      return loginModelFromJson(responseString);
+    } else if (respons.statusCode == 401) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => RegisterPage(phone: phone)),
+      );
+    } else {
+      return null;
+    }
   }
 }

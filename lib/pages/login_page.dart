@@ -54,31 +54,31 @@ class _LoginPageState extends State<LoginPage> {
                 width: 100,
               ),
               LoginForm(),
-              SizedBox(
-                height: 8,
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  color: Colors.white,
-                  onPressed: () async {
-                    String phone = emailController.text.toString();
-                    LoginModel login = await Login(phone);
-                    if (login.success) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Confirm(
-                                phone: emailController.text.toString())),
-                      );
-                    }
-                  },
-                  // child: new Text(
-                  //   getTranslated(context, 'login'),
-                  //   style: TextStyle(fontSize: 22.0),
-                  // ),
-                ),
-              ),
+              // SizedBox(
+              //   height: 8,
+              //   child: RaisedButton(
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(30.0),
+              //     ),
+              //     color: Colors.white,
+              //     onPressed: () async {
+              //       String phone = emailController.text.toString();
+              //       LoginModel login = await Login(phone);
+              //       if (login.success) {
+              //         Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //               builder: (context) => Confirm(
+              //                   phone: emailController.text.toString())),
+              //         );
+              //       }
+              //     },
+              //     // child: new Text(
+              //     //   getTranslated(context, 'login'),
+              //     //   style: TextStyle(fontSize: 22.0),
+              //     // ),
+              //   ),
+              // ),
               routeRegisterWidget(themeColor, context),
               // SocialLoginButtons(themeColor: themeColor)
             ],

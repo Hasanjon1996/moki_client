@@ -20,6 +20,7 @@ import 'package:shoppingapp/utils/drawer_menu/hidden_drawer/screen_hidden_drawer
 import 'package:shoppingapp/utils/drawer_menu/menu/item_hidden_menu.dart';
 import 'package:shoppingapp/utils/navigator.dart';
 import 'package:shoppingapp/utils/theme_notifier.dart';
+import 'package:http/http.dart' as http;
 
 import 'config.dart';
 
@@ -176,7 +177,7 @@ class _InitPageState extends State<InitPage> {
       backgroundColorAppBar: Color.fromARGB(255, 252, 252, 252),
       tittleAppBar: Padding(
         child: Text(
-          "rosen",
+          "Moki",
           style: GoogleFonts.poppins(
             fontSize: 26,
             color: themeColor.getColor(),

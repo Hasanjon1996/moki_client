@@ -22,11 +22,15 @@ class Model {
     name: json["name"],
     phone: json["phone"],
     authKey: json["auth_key"],
+    email: json["email"],
+    password: json["password"],
   );
 
   Map<String, dynamic> toJson() => {
     "name": name,
     "phone": phone,
     "auth_key": authKey,
+    "email": email,
+    "password": password,
   };
 }
